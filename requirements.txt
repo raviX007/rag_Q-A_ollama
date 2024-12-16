@@ -9,7 +9,6 @@ langchain-groq==0.1.0
 langchain-core==0.1.16
 
 # Document Loaders and Text Processing
-unstructured==0.12.5
 langchain-text-splitters==0.0.1
 
 # Embedding and Vector Store
