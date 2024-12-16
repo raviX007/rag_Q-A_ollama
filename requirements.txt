@@ -7,7 +7,7 @@ langchain
 langchain-community
 langchain-groq
 langchain-core
-langchain-ollama
+langchain-openai
 
 # Document Loaders and Text Processing
 unstructured
