@@ -1,20 +1,20 @@
 # Core Libraries
-streamlit==1.29.0
-python-dotenv==1.0.0
+streamlit
+python-dotenv
 
 # LangChain and Related Libraries
-langchain==0.1.0
-langchain-community==0.0.22
-langchain-groq==0.1.0
-langchain-core==0.1.16
+langchain
+langchain-community
+langchain-groq
+langchain-core
 
 # Document Loaders and Text Processing
-langchain-text-splitters==0.0.1
+langchain-text-splitters
 
 # Embedding and Vector Store
-ollama==0.1.6
-faiss-cpu==1.7.4
-sentence-transformers==2.3.1
+ollama
+faiss-cpu
+sentence-transformers
 
 # Groq and Ollama Integration
 groq
@@ -24,8 +24,8 @@ torch
 requests==2.31.0
 
 # Optional but Recommended
-tiktoken==0.5.2
-huggingface-hub==0.20.3
+tiktoken
+huggingface-hub
 
 # Specific Version Pinning for Stability
-openai==1.10.0
+openai
