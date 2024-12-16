@@ -6,28 +6,33 @@ from dotenv import load_dotenv
 # LangChain Imports
 from langchain_groq import ChatGroq
 from langchain_community.document_loaders import WebBaseLoader
-from langchain_ollama import OllamaEmbeddings
+from langchain_openai import OpenAIEmbeddings  # Changed from OllamaEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import create_retrieval_chain
 from langchain_community.vectorstores import FAISS
 
-def initialize_rag_system(url, groq_api_key):
+def initialize_rag_system(url, groq_api_key, openai_api_key):
     """
     Initialize the Retrieval-Augmented Generation (RAG) system.
     
     Args:
         url (str): URL to load documents from
         groq_api_key (str): Groq API key for authentication
+        openai_api_key (str): OpenAI API key for embeddings
     
     Returns:
         tuple: Initialized embeddings, vector store, and retrieval chain
     """
     try:
-        # Validate Groq API key
+        # Validate API keys
         if not groq_api_key:
             st.error("Please enter your Groq API key")
+            return None, None, None
+        
+        if not openai_api_key:
+            st.error("Please enter your OpenAI API key")
             return None, None, None
         
         # Initialize LLM
@@ -36,8 +41,8 @@ def initialize_rag_system(url, groq_api_key):
             model_name="mixtral-8x7b-32768"
         )
         
-        # Initialize Embeddings
-        embeddings = OllamaEmbeddings(model="mxbai-embed-large")
+        # Initialize Embeddings with OpenAI
+        embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
         
         # Load and split documents
         loader = WebBaseLoader(url)
@@ -85,7 +90,7 @@ def main():
     
     # Title and description
     st.title("🔍 Retrieval-Augmented Generation with Groq")
-    st.markdown("Ask questions about documents using Groq and Ollama!")
+    st.markdown("Ask questions about documents using Groq and OpenAI!")
     
     # Sidebar for Configuration
     st.sidebar.header("🔧 RAG Configuration")
@@ -97,9 +102,18 @@ def main():
         help="Enter your Groq API key. Get one at https://console.groq.com"
     )
     
-    # Store API key in session state if provided
+    # OpenAI API Key Input
+    openai_api_key = st.sidebar.text_input(
+        "OpenAI API Key",
+        type="password",
+        help="Enter your OpenAI API key. Get one at https://platform.openai.com"
+    )
+    
+    # Store API keys in session state if provided
     if groq_api_key:
         st.session_state.groq_api_key = groq_api_key
+    if openai_api_key:
+        st.session_state.openai_api_key = openai_api_key
     
     # URL Input
     url = st.sidebar.text_input(
@@ -110,13 +124,13 @@ def main():
     
     # Initialize RAG System Button
     if st.sidebar.button("Initialize RAG System"):
-        # Check for API key
-        if not groq_api_key:
-            st.sidebar.error("Please enter your Groq API key first!")
+        # Check for API keys
+        if not groq_api_key or not openai_api_key:
+            st.sidebar.error("Please enter both Groq and OpenAI API keys!")
             return
             
         # Initialize the RAG system
-        embeddings, vector_store, retrieval_chain = initialize_rag_system(url, groq_api_key)
+        embeddings, vector_store, retrieval_chain = initialize_rag_system(url, groq_api_key, openai_api_key)
         
         # Store in session state
         if retrieval_chain:
@@ -156,7 +170,7 @@ def main():
             # Display Retrieved Context
             with st.expander("Document Similarity Search"):
                 for i, doc in enumerate(response["context"], 1):
-                    st.markdown(f"**Document Snippet {i}:**")
+                    st.markdown(f"*Document Snippet {i}:*")
                     st.write(doc.page_content)
                     st.write("---")
         
