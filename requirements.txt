@@ -17,8 +17,8 @@ faiss-cpu==1.7.4
 sentence-transformers==2.3.1
 
 # Groq and Ollama Integration
-groq==0.3.0
-torch==2.1.2
+groq
+torch
 
 # HTTP and Web Requests
 requests==2.31.0
