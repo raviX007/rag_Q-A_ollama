@@ -10,6 +10,7 @@ langchain-core
 langchain-ollama
 
 # Document Loaders and Text Processing
+unstructured
 langchain-text-splitters
 
 # Embedding and Vector Store
@@ -20,6 +21,7 @@ sentence-transformers
 # Groq and Ollama Integration
 groq
 torch
+bs4
 
 # HTTP and Web Requests
 requests==2.31.0
